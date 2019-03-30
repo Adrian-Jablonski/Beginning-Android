@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#51b46d"
@@ -41,6 +42,7 @@
         android:layout_marginBottom="0dp"
         android:background="@android:color/white"
         android:text="SHOW ANOTHER FUN FACT"
+        android:textColor="#51b46d"
         tools:text="SHOW ANOTHER FUN FACT" />
 
 </RelativeLayout>
