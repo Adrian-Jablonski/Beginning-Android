@@ -10,7 +10,6 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
     private Calculator calculator = new Calculator();
-    private Operations operations = new Operations();
 
     // View Variables
     private Button button9;
@@ -66,60 +65,70 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("9"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener8 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("8"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener7 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("7"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener6 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("6"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener5 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("5"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener4 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("4"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener3 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("3"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("2"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("1"));
+                calculator.showAnswer();
             }
         };
         View.OnClickListener listener0 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("0"));
+                calculator.showAnswer();
             }
         };
 

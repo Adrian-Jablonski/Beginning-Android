@@ -1,9 +1,13 @@
 package com.jablonskiwebdevelopment.calculator;
 
+import android.service.autofill.FieldClassification;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calculator {
+    private Operations operations = new Operations();
+
     private String calcInput = "0";
 
     public String getCalcInput() {
@@ -11,7 +15,6 @@ public class Calculator {
     }
 
     public String typeCalcInput(String input) {
-        //TODO: Replace two operations in a row with current operation
         //TODO: Show calculation answer while inputting text
         if (isOperation(input)) {
             this.calcInput = checkForDuplicateOperations(input);
@@ -30,15 +33,10 @@ public class Calculator {
             return "0";
         }
         else {
-            Pattern p = Pattern.compile("(^\\d)$");
-            Matcher m = p.matcher(input);
-            System.out.println("DOUBLE DUPLICATES");
-
             int lastCharIndex = calcInput.length() - 1;
             String lastChar = calcInput.substring(lastCharIndex);
             if (isOperation(lastChar)) {
-                //FIXME: Not working correctly. Replacing full string instead of just last character. Check regexp
-                return m.replaceFirst(input);
+                return calcInput.substring(0, lastCharIndex) + input;
             }
         }
         return calcInput + input;
@@ -49,7 +47,30 @@ public class Calculator {
     }
 
     private boolean isOperation(String input) {
-        System.out.println("IS OPERATION" + input == "/");
         return input.equals("+")|| input.equals("-") || input.equals("x")|| input.equals("/");
+    }
+
+    public void showAnswer() {
+        String ansInput = calcInput;
+
+        // Does multiplication and division first from left to right;
+        Pattern patternMD = Pattern.compile("(\\d+)(x|/)(\\d+)");
+        ansInput = evaluatingAnswer(ansInput, patternMD);
+
+        // Does addition and subtraction from left to right;
+        Pattern patternAS = Pattern.compile("(\\d+)(\\+|-)(\\d+)");
+        ansInput = evaluatingAnswer(ansInput, patternAS);
+
+        System.out.println("Answer Input " + ansInput);
+    }
+
+    private String evaluatingAnswer(String ansInput, Pattern pattern) {
+        Matcher matcher = pattern.matcher(ansInput);
+        while (matcher.find()) {   // Runs while matches exist from left to right
+            String evaluatedAnswer = operations.evaluate( matcher.group(1),  matcher.group(2),  matcher.group(3));
+            ansInput = ansInput.replaceFirst(Pattern.quote(matcher.group(0)), evaluatedAnswer); // Pattern.quote escapes + character sign inside string
+            matcher = pattern.matcher(ansInput);
+        }
+        return ansInput;
     }
 }
