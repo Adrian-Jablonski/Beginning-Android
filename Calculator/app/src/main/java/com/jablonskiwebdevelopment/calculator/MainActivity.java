@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         multiplication = findViewById(R.id.multiplication);
         subtraction = findViewById(R.id.subtraction);
         addition = findViewById(R.id.addition);
+        equals = findViewById(R.id.equals);
 
         clearButton = findViewById(R.id.clearButton);
         backspace = findViewById(R.id.backspace);
@@ -158,6 +159,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        View.OnClickListener listenerEquals = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculationInput.setText(calculator.equals());
+            }
+        };
+
         View.OnClickListener listenerAddition = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         multiplication.setOnClickListener(listenerMultiplication);
         subtraction.setOnClickListener(listenerSubtraction);
         addition.setOnClickListener(listenerAddition);
+        equals.setOnClickListener(listenerEquals);
 
         clearButton.setOnClickListener(listenerClear);
         backspace.setOnClickListener(listenerBackspace);

@@ -46,6 +46,7 @@ public class Calculator {
     }
 
     public String backSpace() {
+        //TODO: Backspace right after pressing equals should clear input
         int lastCharIndex = calcInput.length() - 1;
         if (lastCharIndex > 0) {
             this.calcInput = calcInput.substring(0, lastCharIndex);
@@ -53,11 +54,14 @@ public class Calculator {
         return calcInput;
     }
 
+    public String equals() {
+        this.calcInput = this.showAnswer();
+        return calcInput;
+    }
+
     private boolean isOperation(String input) {
         return input.equals("+")|| input.equals("-") || input.equals("x")|| input.equals("/");
     }
-
-    //TODO: Add equal sign functionality
 
     //TODO: Add decimal functionality
 
