@@ -15,7 +15,6 @@ public class Calculator {
     }
 
     public String typeCalcInput(String input) {
-        //TODO: Show calculation answer while inputting text
         if (isOperation(input)) {
             this.calcInput = checkForDuplicateOperations(input);
         }
@@ -46,22 +45,34 @@ public class Calculator {
         this.calcInput = "0";
     }
 
+    public String backSpace() {
+        int lastCharIndex = calcInput.length() - 1;
+        if (lastCharIndex > 0) {
+            this.calcInput = calcInput.substring(0, lastCharIndex);
+        }
+        return calcInput;
+    }
+
     private boolean isOperation(String input) {
         return input.equals("+")|| input.equals("-") || input.equals("x")|| input.equals("/");
     }
 
-    public void showAnswer() {
+    //TODO: Add equal sign functionality
+
+    //TODO: Add decimal functionality
+
+    public String showAnswer() {
         String ansInput = calcInput;
 
         // Does multiplication and division first from left to right;
-        Pattern patternMD = Pattern.compile("(\\d+)(x|/)(\\d+)");
+        Pattern patternMD = Pattern.compile("(-?\\d+)(x|/)(-?\\d+)");
         ansInput = evaluatingAnswer(ansInput, patternMD);
 
         // Does addition and subtraction from left to right;
-        Pattern patternAS = Pattern.compile("(\\d+)(\\+|-)(\\d+)");
+        Pattern patternAS = Pattern.compile("(-?\\d+)(\\+|-)(-?\\d+)");
         ansInput = evaluatingAnswer(ansInput, patternAS);
 
-        System.out.println("Answer Input " + ansInput);
+        return removeOperatorFromLastChar(ansInput);
     }
 
     private String evaluatingAnswer(String ansInput, Pattern pattern) {
@@ -72,5 +83,17 @@ public class Calculator {
             matcher = pattern.matcher(ansInput);
         }
         return ansInput;
+    }
+
+    private String removeOperatorFromLastChar(String input) {
+        Pattern pattern = Pattern.compile("[^\\d]$");
+        Matcher matcher = pattern.matcher(input);
+        System.out.println("Matched last non digit char ");
+        if (matcher.find()) {
+            System.out.println("FOUND MATCH");
+            input = input.substring(0, input.length() - 1);
+            System.out.println(input);
+        }
+        return input;
     }
 }

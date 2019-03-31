@@ -32,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private Button decimal;
 
     private Button clearButton;
+    private Button backspace;
 
     private TextView calculationInput;
+    private TextView calculationAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Assign Views from the layout file to variables
         calculationInput = findViewById(R.id.calculationInput);
+        calculationAnswer = findViewById(R.id.calculationAnswer);
 
         button9 = findViewById(R.id.button9);
         button8 = findViewById(R.id.button8);
@@ -60,75 +63,76 @@ public class MainActivity extends AppCompatActivity {
         addition = findViewById(R.id.addition);
 
         clearButton = findViewById(R.id.clearButton);
+        backspace = findViewById(R.id.backspace);
 
         View.OnClickListener listener9 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("9"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener8 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("8"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener7 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("7"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener6 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("6"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener5 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("5"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener4 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("4"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener3 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("3"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("2"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("1"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
         View.OnClickListener listener0 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calculationInput.setText(calculator.typeCalcInput("0"));
-                calculator.showAnswer();
+                calculationAnswer.setText(calculator.showAnswer());
             }
         };
 
@@ -165,7 +169,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 calculationInput.setText("0");
+                calculationAnswer.setText("0");
                 calculator.clear();
+            }
+        };
+
+        View.OnClickListener listenerBackspace = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculationInput.setText(calculator.backSpace());
+
+                //TODO: Show current value in calculation answer without operation sign
+                calculationAnswer.setText(calculator.showAnswer());
+
             }
         };
 
@@ -188,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         addition.setOnClickListener(listenerAddition);
 
         clearButton.setOnClickListener(listenerClear);
+        backspace.setOnClickListener(listenerBackspace);
 
     }
 }
