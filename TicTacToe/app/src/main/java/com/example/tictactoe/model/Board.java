@@ -4,6 +4,8 @@ public class Board {
     private char[] board = new char[9];
     private char mark = 'X';
     private String markColor = "#0000FF";
+    private Player currPlayer;
+    private Player otherPlayer;
 
     public Board() {
         for (int i = 0; i < 9; i++) {
@@ -16,7 +18,6 @@ public class Board {
     }
 
     public void setBoardSpot(int spot, char mark) {
-        this.setMarkAndColor();
         this.board[spot] = mark;
     }
 
@@ -32,27 +33,40 @@ public class Board {
         return markColor;
     }
 
-    public void setMarkAndColor() {
-        if (this.mark == 'X') {
-            this.mark = 'O';
-            this.markColor = "#FF0000";
-        }
-        else {
-            this.mark = 'X';
-            this.markColor = "#0000FF";
-        }
-    }
-
-    public void checkWinner() {
+    public boolean checkWinner(Player currPlayer) {
         if (spotsEqual(0, 1, 2) || spotsEqual(3, 4, 5) || spotsEqual(6, 7, 8) ||
                 spotsEqual(0, 3, 6) || spotsEqual(1, 4, 7) || spotsEqual(2, 5, 8) ||
                 spotsEqual(0, 4, 8) || spotsEqual(2, 4, 6)) {
-            System.out.println("WINNER!");
+            System.out.printf("%s wins!%n", currPlayer.getPlayerName());
+            return true;
         }
+        return false;
     }
 
     private boolean spotsEqual(int spot1, int spot2, int spot3) {
         return board[spot1] != 'E' && board[spot1] == board[spot2] && board[spot2] == board[spot3];
     }
 
+    public Player getCurrPlayer() {
+        return currPlayer;
+    }
+
+    public void setCurrAndOtherPlayer(Player player1, Player player2) {
+        if (player1.isPlayersTurn()) {
+            this.currPlayer = player1;
+            this.otherPlayer = player2;
+        }
+        else {
+            this.currPlayer = player2;
+            this.otherPlayer = player1;
+        }
+    }
+
+    public Player getOtherPlayer() {
+        return otherPlayer;
+    }
+
+    public void setOtherPlayer(Player otherPlayer) {
+        this.otherPlayer = otherPlayer;
+    }
 }
