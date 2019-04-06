@@ -108,12 +108,12 @@ public class GameActivity extends AppCompatActivity {
             player1.setPlayersTurn(!player1.isPlayersTurn());
             player2.setPlayersTurn(!player2.isPlayersTurn());
 
-            if (board.checkWinner(currPlayer)) {
-                //TODO: Set score here
+            int[] winningSpots = board.winningSpots();
+
+            if (winningSpots.length != 0) {
                 currPlayer.setPlayerScore();
                 setPlayerScores();
-                //TODO: Flash winning spots
-                flashWinningSpots();
+                flashWinningSpots(winningSpots);
                 //TODO: Reset game
 
                 String message = String.format("%s Wins!", currPlayer.getPlayerName());
@@ -136,13 +136,14 @@ public class GameActivity extends AppCompatActivity {
         gameMessage.setText(message);
     }
 
-    private void flashWinningSpots() {
+    private void flashWinningSpots(int[] winningSpots) {
         Animation animation = new AlphaAnimation(1, 0);
         animation.setDuration(300);
         animation.setInterpolator(new LinearInterpolator());
         animation.setRepeatCount(5);
         animation.setRepeatMode(Animation.REVERSE);
-        buttons[0].startAnimation(animation);
-        buttons[1].startAnimation(animation);
+        buttons[winningSpots[0]].startAnimation(animation);
+        buttons[winningSpots[1]].startAnimation(animation);
+        buttons[winningSpots[2]].startAnimation(animation);
     }
 }

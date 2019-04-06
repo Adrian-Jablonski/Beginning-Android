@@ -43,6 +43,37 @@ public class Board {
         return false;
     }
 
+    public int[] winningSpots() {
+        if (spotsEqual(0, 1, 2)) {
+            return new int[]{0, 1, 2};
+        }
+        else if (spotsEqual(3, 4, 5)) {
+            return new int[]{3, 4, 5};
+        }
+        else if (spotsEqual(6, 7, 8)) {
+            return new int[]{6, 7, 8};
+        }
+
+        else if (spotsEqual(0, 3, 6)) {
+            return new int[]{0, 3, 6};
+        }
+        else if (spotsEqual(1, 4, 7)) {
+            return new int[]{1, 4, 7};
+        }
+        else if (spotsEqual(2, 5, 8)) {
+            return new int[]{2, 5, 8};
+        }
+
+        else if (spotsEqual(0, 4, 8)) {
+            return new int[]{0, 4, 8};
+        }
+        else if (spotsEqual(2, 4, 6)) {
+            return new int[]{2, 4, 6};
+        }
+
+        return new int[] {};
+    }
+
     private boolean spotsEqual(int spot1, int spot2, int spot3) {
         return board[spot1] != 'E' && board[spot1] == board[spot2] && board[spot2] == board[spot3];
     }
