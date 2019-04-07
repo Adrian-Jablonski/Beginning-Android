@@ -1,13 +1,21 @@
 package com.example.tictactoe.model;
 
+import java.util.Arrays;
+import java.util.Random;
+
 public class Board {
     private char[] board = new char[9];
     private char mark = 'X';
     private String markColor = "#0000FF";
     private Player currPlayer;
     private Player otherPlayer;
+    private boolean winner = false;
 
     public Board() {
+        resetBoard();
+    }
+
+    public void resetBoard() {
         for (int i = 0; i < 9; i++) {
             this.board[i] = 'E';
         }
@@ -31,16 +39,6 @@ public class Board {
 
     public String getMarkColor() {
         return markColor;
-    }
-
-    public boolean checkWinner(Player currPlayer) {
-        if (spotsEqual(0, 1, 2) || spotsEqual(3, 4, 5) || spotsEqual(6, 7, 8) ||
-                spotsEqual(0, 3, 6) || spotsEqual(1, 4, 7) || spotsEqual(2, 5, 8) ||
-                spotsEqual(0, 4, 8) || spotsEqual(2, 4, 6)) {
-            System.out.printf("%s wins!%n", currPlayer.getPlayerName());
-            return true;
-        }
-        return false;
     }
 
     public int[] winningSpots() {
@@ -99,5 +97,27 @@ public class Board {
 
     public void setOtherPlayer(Player otherPlayer) {
         this.otherPlayer = otherPlayer;
+    }
+
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
+    public int getComputerMove() {
+        Random rand = new Random();
+        int computerMove = rand.nextInt(9);
+        while (board[computerMove] != 'E') {
+            computerMove = rand.nextInt(9);
+        }
+
+        return computerMove;
+    }
+
+    public boolean noMoreSpots() {
+        return !(new String(board).contains("E"));
     }
 }

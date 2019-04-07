@@ -3,6 +3,7 @@ package com.example.tictactoe.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import com.example.tictactoe.R;
 import com.example.tictactoe.model.Board;
 import com.example.tictactoe.model.Player;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -29,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private Board board = new Board();
 
     private Button[] buttons = new Button[9];
+    private Button playAgain;
 
     private Player player1, player2;
 
@@ -55,14 +60,16 @@ public class GameActivity extends AppCompatActivity {
         buttons[7] = findViewById(R.id.button7);
         buttons[8] = findViewById(R.id.button8);
 
+        playAgain = findViewById(R.id.playAgainBtn);
+
         Intent intent = getIntent();
         String p1Name = intent.getStringExtra("player1Name");
         String p1Color = intent.getStringExtra("player1Color");
         String p2Name = intent.getStringExtra("player2Name");
         String p2Color = intent.getStringExtra("player2Color");
 
-        player1 = new Player(p1Name, 'X', p1Color, true);
-        player2 = new Player(p2Name, 'O', p2Color, false);
+        player1 = new Player(p1Name, 'X', p1Color, true, false);
+        player2 = new Player(p2Name, 'O', p2Color, false, true);
 
         setInitialGameText();
 
@@ -74,6 +81,36 @@ public class GameActivity extends AppCompatActivity {
                     placeMarkOnBoard(v, finalI);
                 }
             });
+        }
+
+        isComputerStarting();
+
+        playAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playAgain.setVisibility(View.INVISIBLE);
+                toggleButtonDisabled(false);
+                board.resetBoard();
+                resetButtonColors();
+                board.setCurrAndOtherPlayer(player1, player2);
+                updateGameMessage(board.getCurrPlayer());
+                isComputerStarting();
+            }
+        });
+    }
+
+    private void isComputerStarting() {
+        if (board.getCurrPlayer().isComputer()) {
+            computerMove();
+        }
+        else {
+            toggleButtonDisabled(true);
+        }
+    }
+
+    private void resetButtonColors() {
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setBackgroundColor(Color.LTGRAY);
         }
     }
 
@@ -97,10 +134,9 @@ public class GameActivity extends AppCompatActivity {
     private void placeMarkOnBoard(View v, int i) {
         board.setCurrAndOtherPlayer(player1, player2);
         Player currPlayer = board.getCurrPlayer();
+        Player otherPlayer = board.getOtherPlayer();
 
-        System.out.println("Clicked Spot");
         if (board.getBoardSpot(i) == 'E') {
-            System.out.println("Clicked valid spot");
             board.setBoardSpot(i, currPlayer.getPlayerMark());
             v.setBackgroundColor(Color.parseColor(currPlayer.getPlayerMarkColor()));
             printBoard();
@@ -111,19 +147,35 @@ public class GameActivity extends AppCompatActivity {
             int[] winningSpots = board.winningSpots();
 
             if (winningSpots.length != 0) {
-                currPlayer.setPlayerScore();
-                setPlayerScores();
-                flashWinningSpots(winningSpots);
-                //TODO: Reset game
-
-                String message = String.format("%s Wins!", currPlayer.getPlayerName());
-                gameMessage.setText(message);
-
+                board.setWinner(true);
+                gameOver(currPlayer, winningSpots);
+            }
+            else if (board.noMoreSpots()) {
+                gameOver(currPlayer, winningSpots);
             }
             else {
-                updateGameMessage(board.getOtherPlayer());
+                updateGameMessage(otherPlayer);
+
+                if (otherPlayer.isComputer()) {
+                    computerMove();
+                }
             }
         }
+    }
+
+    private void gameOver(Player currPlayer, int[] winningSpots) {
+        toggleButtonDisabled(false);
+        String message = "Tie Game";
+        if (board.isWinner()) {
+            currPlayer.setPlayerScore();
+            setPlayerScores();
+            flashWinningSpots(winningSpots);
+            board.setWinner(false);
+            message = String.format("%s Wins!", currPlayer.getPlayerName());
+        }
+        playAgain.setVisibility(View.VISIBLE);
+
+        gameMessage.setText(message);
     }
 
 
@@ -140,10 +192,34 @@ public class GameActivity extends AppCompatActivity {
         Animation animation = new AlphaAnimation(1, 0);
         animation.setDuration(300);
         animation.setInterpolator(new LinearInterpolator());
-        animation.setRepeatCount(5);
+        animation.setRepeatCount(7);
         animation.setRepeatMode(Animation.REVERSE);
         buttons[winningSpots[0]].startAnimation(animation);
         buttons[winningSpots[1]].startAnimation(animation);
         buttons[winningSpots[2]].startAnimation(animation);
+    }
+
+    private void computerMove() {
+        toggleButtonDisabled(false);
+        int computerSpot = board.getComputerMove();
+        computerClick(computerSpot);
+    }
+
+    private void computerClick(final int i) {
+        //TODO: Disable button clicks when computers turn. Enable on players turn
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                buttons[i].performClick();
+                toggleButtonDisabled(true);
+            }
+        }, 1500);
+    }
+
+    private void toggleButtonDisabled(boolean buttonEnabled) {
+        for (Button button : buttons) {
+            button.setEnabled(buttonEnabled);
+        }
     }
 }

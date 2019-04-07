@@ -7,12 +7,14 @@ public class Player {
     private char playerMark;
     private String playerMarkColor;
     private boolean playersTurn;
+    private boolean isComputer;
 
-    public Player(String playerName, char playerMark, String playerMarkColor, boolean playersTurn) {
+    public Player(String playerName, char playerMark, String playerMarkColor, boolean playersTurn, boolean isComputer) {
         this.playerName = playerName;
         this.playerMark = playerMark;
         this.playerMarkColor = playerMarkColor;
         this.playersTurn = playersTurn;
+        this.isComputer = isComputer;
     }
 
     public String getPlayerName() {
@@ -57,5 +59,9 @@ public class Player {
 
     public void setPlayerMarkColor(String playerMarkColor) {
         this.playerMarkColor = playerMarkColor;
+    }
+
+    public boolean isComputer() {
+        return isComputer;
     }
 }
