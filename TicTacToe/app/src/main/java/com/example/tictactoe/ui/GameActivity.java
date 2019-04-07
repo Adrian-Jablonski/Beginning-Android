@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -12,13 +11,11 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tictactoe.R;
 import com.example.tictactoe.model.Board;
 import com.example.tictactoe.model.Player;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -67,10 +64,15 @@ public class GameActivity extends AppCompatActivity {
         String p1Color = intent.getStringExtra("player1Color");
         String p2Name = intent.getStringExtra("player2Name");
         String p2Color = intent.getStringExtra("player2Color");
+        String gameMode = intent.getStringExtra("gameMode");
         boolean p2IsComputer = intent.getStringExtra("player2Type").equals("Computer");
 
         player1 = new Player(p1Name, 'X', p1Color, true, false);
         player2 = new Player(p2Name, 'O', p2Color, false, p2IsComputer);
+
+        board.setGameMode(gameMode);
+
+        System.out.printf("Game Mode: %s%n", board.getGameMode());
 
         setInitialGameText();
 
@@ -145,6 +147,10 @@ public class GameActivity extends AppCompatActivity {
             player1.setPlayersTurn(!player1.isPlayersTurn());
             player2.setPlayersTurn(!player2.isPlayersTurn());
 
+            if (board.isDisappearingGameMode()) {
+                removeMark(i);
+            }
+
             int[] winningSpots = board.winningSpots();
 
             if (winningSpots.length != 0) {
@@ -164,6 +170,26 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void removeMark(int i) {
+        board.setMarkOrder(board.getMarkOrder() + i);
+        String markOrder = board.getMarkOrder();
+        int markOrderLen = markOrder.length();
+        if (board.isDisappearingFlashingGameMode()) {
+            if (markOrderLen == 6) {
+                flashDisappearingSpot(Integer.parseInt(markOrder.substring(0, 1)));
+            }
+            else if (markOrderLen >= 7) {
+                flashDisappearingSpot(Integer.parseInt(markOrder.substring(1, 2)));
+            }
+        }
+        if (markOrderLen >= 7) {
+            int firstMark = Integer.parseInt(markOrder.substring(0, 1));
+            board.setMarkOrder(markOrder.substring(1));
+            board.setBoardSpot(firstMark, 'E');
+            buttons[firstMark].setBackgroundColor(Color.LTGRAY);
+        }
+    }
+
     private void gameOver(Player currPlayer, int[] winningSpots) {
         toggleButtonDisabled(false);
         String message = "Tie Game";
@@ -172,6 +198,7 @@ public class GameActivity extends AppCompatActivity {
             setPlayerScores();
             flashWinningSpots(winningSpots);
             board.setWinner(false);
+            board.setMarkOrder("");
             message = String.format("%s Wins!", currPlayer.getPlayerName());
         }
         playAgain.setVisibility(View.VISIBLE);
@@ -198,6 +225,15 @@ public class GameActivity extends AppCompatActivity {
         buttons[winningSpots[0]].startAnimation(animation);
         buttons[winningSpots[1]].startAnimation(animation);
         buttons[winningSpots[2]].startAnimation(animation);
+    }
+
+    private void flashDisappearingSpot(int disappearingSpot) {
+        Animation animation = new AlphaAnimation(1, 0);
+        animation.setDuration(300);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.setRepeatCount(5);
+        animation.setRepeatMode(Animation.REVERSE);
+        buttons[disappearingSpot].startAnimation(animation);
     }
 
     private void computerMove() {

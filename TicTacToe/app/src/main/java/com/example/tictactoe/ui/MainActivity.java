@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private Button player2Green;
     private Button player2Orange;
 
-    private RadioGroup radioGroup;
+    private RadioGroup playerTypeSelection;
+    private RadioGroup gameMode;
     private RadioButton selectedPlayerBtn;
+    private RadioButton selectedGameModeBtn;
 
     private RadioButton playComputerBtn;
     private RadioButton playPersonBtn;
@@ -49,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
         player2Name = findViewById(R.id.player2Name);
         player1Color = findViewById(R.id.p1Color);
         player2Color = findViewById(R.id.p2Color);
-        radioGroup = findViewById(R.id.playerTypeSelection);
+
+        playerTypeSelection = findViewById(R.id.playerTypeSelection);
+        gameMode = findViewById(R.id.gameMode);
 
         playComputerBtn = findViewById(R.id.playComputerBtn);
         playPersonBtn = findViewById(R.id.playPersonBtn);
@@ -150,8 +154,6 @@ public class MainActivity extends AppCompatActivity {
                     p2Name = "Player 2";
                 }
 
-                player2Type();
-
                 startGame(p1Name, p1Color, p2Name, p2Color);
             }
         });
@@ -173,14 +175,23 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("player2Name", p2Name);
         intent.putExtra("player2Color", p2Color);
         intent.putExtra("player2Type", player2Type());
+        intent.putExtra("gameMode", gameMode());
 
         startActivity(intent);
     }
 
+    private String gameMode() {
+        int selectedGameMode = gameMode.getCheckedRadioButtonId();
+        selectedGameModeBtn = findViewById(selectedGameMode);
+
+        return (String) selectedGameModeBtn.getText();
+    }
+
     private String player2Type() {
-        int selectedPlayerType = radioGroup.getCheckedRadioButtonId();
+        int selectedPlayerType = playerTypeSelection.getCheckedRadioButtonId();
         selectedPlayerBtn = findViewById(selectedPlayerType);
 
         return (String) selectedPlayerBtn.getText();
+
     }
 }

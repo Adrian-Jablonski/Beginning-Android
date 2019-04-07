@@ -1,17 +1,18 @@
 package com.example.tictactoe.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class Board {
     private char[] board = new char[9];
+    private String markOrder = "";
     private char mark = 'X';
     private String markColor = "#0000FF";
     private Player currPlayer;
     private Player otherPlayer;
     private boolean winner = false;
+    private String gameMode;
+    private boolean disappearingGameMode = false;
+    private boolean disappearingFlashingGameMode = false;
 
     public Board() {
         resetBoard();
@@ -41,6 +42,37 @@ public class Board {
 
     public String getMarkColor() {
         return markColor;
+    }
+
+    public String getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(String gameMode) {
+        this.gameMode = gameMode;
+        if (gameMode.toLowerCase().indexOf("disappearing") != -1) {
+            this.disappearingGameMode = true;
+            if (gameMode.toLowerCase().indexOf("flashing") != -1) {
+                this.disappearingFlashingGameMode = true;
+            }
+        }
+    }
+
+    public boolean isDisappearingGameMode() {
+        return disappearingGameMode;
+    }
+
+    public boolean isDisappearingFlashingGameMode() {
+        return disappearingFlashingGameMode;
+    }
+
+    public String getMarkOrder() {
+        return markOrder;
+    }
+
+    public void setMarkOrder(String markOrder) {
+        this.markOrder = markOrder;
+        System.out.println("Mark Order: " + this.markOrder);
     }
 
     public int[] winningSpots() {
