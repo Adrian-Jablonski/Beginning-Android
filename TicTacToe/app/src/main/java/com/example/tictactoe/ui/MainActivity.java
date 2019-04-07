@@ -3,31 +3,23 @@ package com.example.tictactoe.ui;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.tictactoe.R;
-import com.example.tictactoe.model.Player;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private String p1Color = "#0000FF";
     private String p2Color = "#FF0000";
 
-    private EditText nameField;
+    private EditText player1Name;
+    private EditText player2Name;
     private TextView player1Color;
     private TextView player2Color;
 
@@ -36,10 +28,16 @@ public class MainActivity extends AppCompatActivity {
     private Button player1Red;
     private Button player1Green;
     private Button player1Orange;
+    private Button player2Blue;
+    private Button player2Red;
+    private Button player2Green;
+    private Button player2Orange;
 
     private RadioGroup radioGroup;
     private RadioButton selectedPlayerBtn;
 
+    private RadioButton playComputerBtn;
+    private RadioButton playPersonBtn;
 
 
     @Override
@@ -47,14 +45,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nameField = findViewById(R.id.player1Name);
+        player1Name = findViewById(R.id.player1Name);
+        player2Name = findViewById(R.id.player2Name);
         player1Color = findViewById(R.id.p1Color);
+        player2Color = findViewById(R.id.p2Color);
         radioGroup = findViewById(R.id.playerTypeSelection);
+
+        playComputerBtn = findViewById(R.id.playComputerBtn);
+        playPersonBtn = findViewById(R.id.playPersonBtn);
 
         player1Blue = findViewById(R.id.player1Blue);
         player1Red = findViewById(R.id.player1Red);
         player1Green = findViewById(R.id.player1Green);
         player1Orange = findViewById(R.id.player1Orange);
+
+        player2Blue = findViewById(R.id.player2Blue);
+        player2Red = findViewById(R.id.player2Red);
+        player2Green = findViewById(R.id.player2Green);
+        player2Orange = findViewById(R.id.player2Orange);
 
         playButton = findViewById(R.id.playButton);
 
@@ -87,14 +95,57 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        player2Blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                p2Color = setPlayerColor(p2Color, p1Color, "#0000FF");
+                player2Color.setBackgroundColor(Color.parseColor(p2Color));
+            }
+        });
+        player2Red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                p2Color = setPlayerColor(p2Color, p1Color, "#FF0000");
+                player2Color.setBackgroundColor(Color.parseColor(p2Color));
+            }
+        });
+        player2Green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                p2Color = setPlayerColor(p2Color, p1Color, "#00FF00");
+                player2Color.setBackgroundColor(Color.parseColor(p2Color));
+            }
+        });
+        player2Orange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                p2Color = setPlayerColor(p2Color, p1Color, "#FFA500");
+                player2Color.setBackgroundColor(Color.parseColor(p2Color));
+            }
+        });
+
+        playComputerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                player2Name.setText("Computer");
+                player2Name.setVisibility(View.INVISIBLE);
+            }
+        });
+        playPersonBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                player2Name.setVisibility(View.VISIBLE);
+            }
+        });
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String p1Name = nameField.getText().toString();
+                String p1Name = player1Name.getText().toString();
                 if (p1Name.matches("")) {
                     p1Name = "Player 1";
                 }
-                String p2Name = "Computer";
+                String p2Name = player2Name.getText().toString();
                 if (p2Name.matches("")) {
                     p2Name = "Player 2";
                 }

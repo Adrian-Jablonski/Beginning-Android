@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TicTacToe</string>
+    <string name="app_name">Tic Tac Toe</string>
     <string name="key_name">name</string>
 
     <string name="player_1_color">Choose Player 1 Color</string>
