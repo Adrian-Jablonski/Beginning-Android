@@ -67,9 +67,10 @@ public class GameActivity extends AppCompatActivity {
         String p1Color = intent.getStringExtra("player1Color");
         String p2Name = intent.getStringExtra("player2Name");
         String p2Color = intent.getStringExtra("player2Color");
+        boolean p2IsComputer = intent.getStringExtra("player2Type").equals("Computer");
 
         player1 = new Player(p1Name, 'X', p1Color, true, false);
-        player2 = new Player(p2Name, 'O', p2Color, false, true);
+        player2 = new Player(p2Name, 'O', p2Color, false, p2IsComputer);
 
         setInitialGameText();
 

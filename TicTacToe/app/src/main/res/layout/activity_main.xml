@@ -19,24 +19,31 @@
 
     <EditText
         android:id="@+id/player1Name"
-        android:layout_width="wrap_content"
+        android:layout_width="130sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:inputType="textCapSentences"
         android:maxLength="12"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="Player Name"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Player 1 Name :"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/heading" />
 
@@ -44,11 +51,108 @@
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:text="Play"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.479"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player1Name" />
+        app:layout_constraintTop_toBottomOf="@+id/playerTypeSelection" />
+
+    <RadioGroup
+        android:id="@+id/playerTypeSelection"
+        android:layout_width="115dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <RadioButton
+            android:id="@+id/playComputerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Computer" />
+
+        <RadioButton
+            android:id="@+id/playPersonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Person" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="314dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player1Name">
+
+        <Button
+            android:id="@+id/player1Blue"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginLeft="48dp"
+            android:background="#0000FF"
+            android:textColor="#0000FF"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="424dp" />
+
+        <Button
+            android:id="@+id/player1Red"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="12dp"
+            android:background="#FF0000"
+            android:textColor="#FF0000"
+            app:layout_constraintStart_toEndOf="@+id/player1Green"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <Button
+            android:id="@+id/player1Green"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="12dp"
+            android:background="#00FF00"
+            android:textColor="#00FF00"
+            app:layout_constraintStart_toEndOf="@+id/player1Orange"
+            tools:layout_editor_absoluteY="424dp" />
+
+        <Button
+            android:id="@+id/player1Orange"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="12dp"
+            android:background="#FFA500"
+            android:textColor="#FFA500"
+            app:layout_constraintStart_toEndOf="@+id/player1Blue"
+            tools:layout_editor_absoluteY="424dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/p1Color"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
+        android:background="#0000FF"
+        android:textColor="#0000FF"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/heading" />
 
 </android.support.constraint.ConstraintLayout>

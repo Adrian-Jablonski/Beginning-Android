@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">TicTacToe</string>
     <string name="key_name">name</string>
+
+    <string name="player_1_color">Choose Player 1 Color</string>
+    <string-array name="player_colors">
+        <item>#0000FF</item>
+        <item>#00FF00</item>
+        <item>#800080</item>
+        <item>#FF0000</item>
+        <item>#FFFF00</item>
+        <item>#FFA500</item>
+    </string-array>
 </resources>
