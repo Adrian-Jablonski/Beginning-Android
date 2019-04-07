@@ -142,7 +142,7 @@ public class Board {
         }
 
         // Computer blocks
-        if (analyzeBoardBlock(0, 1, 2) || analyzeBoardBlock(0, 3, 6) || analyzeBoardBlock(0, 4, 8)) {
+        else if (analyzeBoardBlock(0, 1, 2) || analyzeBoardBlock(0, 3, 6) || analyzeBoardBlock(0, 4, 8)) {
             return 0;
         }
         else if (analyzeBoardBlock(1, 0, 2) || analyzeBoardBlock(1, 4, 7)) {
@@ -174,11 +174,11 @@ public class Board {
     }
 
     private boolean analyzeBoard(int spotToPlace, int spot1, int spot2, char computerMark) {
-        return board[spotToPlace] == 'E' && board[spot1] == board[spot2] && board[spot1] == computerMark;
+        return board[spotToPlace] == 'E' && board[spot1] != 'E' && board[spot1] == board[spot2]  && board[spot1] == computerMark;
     }
 
     private boolean analyzeBoardBlock(int spotToPlace, int spot1, int spot2) {
-        return board[spotToPlace] == 'E' && board[spot1] == board[spot2];
+        return board[spotToPlace] == 'E' && board[spot1] != 'E' && board[spot1] == board[spot2];
     }
 
     private int computerMoveRandom() {
