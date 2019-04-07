@@ -201,7 +201,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void computerMove() {
         toggleButtonDisabled(false);
-        int computerSpot = board.getComputerMove();
+        int computerSpot = board.getComputerMove(board.getOtherPlayer().getPlayerMark());
         computerClick(computerSpot);
     }
 
