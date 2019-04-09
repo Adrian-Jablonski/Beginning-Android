@@ -1,8 +1,12 @@
 package com.example.weatherapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -30,35 +34,57 @@ public class MainActivity extends AppCompatActivity {
                 + latitude + ","
                 + longitude;
 
-        OkHttpClient client = new OkHttpClient();
+        if (isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url(forecastURL)
-                .build();
+            Request request = new Request.Builder()
+                    .url(forecastURL)
+                    .build();
 
-        Call call = client.newCall(request);
+            Call call = client.newCall(request);
 
-        call.enqueue(new Callback() {       // Executes call Asynchronously in the background in the order they are added to the queue
-            @Override
-            public void onFailure(Call call, IOException e) {
+            call.enqueue(new Callback() {       // Executes call Asynchronously in the background in the order they are added to the queue
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                // Need to add <uses-permission android:name="android.permission.INTERNET" to AndroidManifest to prevent missing INTERNET permission error
-                try {
-                    if (response.isSuccessful()) {
-                        System.out.println(response.body().string());
-                    }
-                    else {
-                        System.out.println("***Else Failed");
-                    }
-                } catch (IOException e) {
-                    System.out.println("FAILED");
-                    Log.e(TAG, "IO Exception caught: ", e);
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    // Need to add <uses-permission android:name="android.permission.INTERNET" to AndroidManifest to prevent missing INTERNET permission error
+                    try {
+                        Log.e(TAG, response.body().string());
+                        if (response.isSuccessful()) {
+
+                        } else {
+                            alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        System.out.println("FAILED");
+                        Log.e(TAG, "IO Exception caught: ", e);
+                    }
+                }
+            });
+        }
     }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();   // Need to add <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> to AndroidManifest to avoid error
+
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        else {
+            Toast.makeText(this, "Sorry, network is unavailable", Toast.LENGTH_LONG).show();
+        }
+        return isAvailable;
+    }
+
+    private void alertUserAboutError() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.show(getFragmentManager(), "error_dialog");
+    }
+
 }
