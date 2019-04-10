@@ -5,8 +5,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -20,14 +25,20 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    private CurrentWeather currentWeather;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView darkSky = findViewById(R.id.darkSkyAttribution);
+        darkSky.setMovementMethod(LinkMovementMethod.getInstance());    // Enables clicking on link
+
         String apiKey = "73bce4dfddf4d93bf253cdbb61c85400";
 
-        double latitude = 37.8267;
-        double longitude = -122.423;
+        double latitude = 29.7604;
+        double longitude = -95.3698;
 
         String forecastURL = "https://api.darksky.net/forecast/"
                 + apiKey + "/"
@@ -53,19 +64,49 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call call, Response response) throws IOException {
                     // Need to add <uses-permission android:name="android.permission.INTERNET" to AndroidManifest to prevent missing INTERNET permission error
                     try {
-                        Log.e(TAG, response.body().string());
+                        String jsonData = response.body().string();
+                        Log.e(TAG, jsonData);
                         if (response.isSuccessful()) {
 
+                            currentWeather = getCurrentDetails(jsonData);
                         } else {
                             alertUserAboutError();
                         }
                     } catch (IOException e) {
                         System.out.println("FAILED");
                         Log.e(TAG, "IO Exception caught: ", e);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON Exception caught: ", e);
                     }
                 }
             });
         }
+    }
+
+    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+
+        String timezone = forecast.getString("timezone");   // timezone is the key in the JSON data
+
+        System.out.println(timezone);
+
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        CurrentWeather currentWeather = new CurrentWeather();
+
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setLocationLabel("Houston, TX");
+        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
+        currentWeather.setSummary(currently.getString("summary"));
+        currentWeather.setTemperature(currently.getDouble("temperature"));
+        currentWeather.setTimeZone(timezone);
+
+        System.out.println(currently);
+        System.out.println(currentWeather.getFormattedTime());
+
+        return currentWeather;
     }
 
     private boolean isNetworkAvailable() {
