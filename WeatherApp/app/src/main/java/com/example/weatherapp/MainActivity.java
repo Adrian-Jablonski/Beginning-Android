@@ -1,6 +1,7 @@
 package com.example.weatherapp;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.weatherapp.databinding.ActivityMainBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,19 +24,53 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+// Notes: To enable data binding    // https://developer.android.com/topic/libraries/data-binding
+// First: Go to build.gradle and add
+//    dataBinding {
+//        enabled = true
+//    }
+// Next go to activity_main.xml and create a layout tag at the beginning of the file. Enclose all xml code inside the layout tag and copy the xmlns:android properties into the tag
+// Next add a data tag
+// <data>
+//      <variable
+//          name="weather"
+//          type = "com.example.weatherapp.CurrentWeather">
+//      </variable>
+//  </data>
+// Could use @{weather.summary} in activity_main to get the current weather data
+
+// Next change setContentView(R.layout.activity_main); to ActivityMainBinding binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+// Next in onresponse, make a new CurrentWeather object
+// Then to pass the data to the xml view, use binding.setWeather(displayWeather);
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    private TextView temperature;
+    private TextView time;
+    private TextView location;
+    private TextView humidity;
+    private TextView precipitation;
+    private TextView summary;
 
     private CurrentWeather currentWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+        final ActivityMainBinding binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
 
         TextView darkSky = findViewById(R.id.darkSkyAttribution);
         darkSky.setMovementMethod(LinkMovementMethod.getInstance());    // Enables clicking on link
+
+        temperature = findViewById(R.id.temperatureValue);
+        time = findViewById(R.id.timeValue);
+        location = findViewById(R.id.locationValue);
+        humidity = findViewById(R.id.humidityValue);
+        precipitation = findViewById(R.id.precipValue);
+        summary = findViewById(R.id.summaryValue);
 
         String apiKey = "73bce4dfddf4d93bf253cdbb61c85400";
 
@@ -67,8 +104,21 @@ public class MainActivity extends AppCompatActivity {
                         String jsonData = response.body().string();
                         Log.e(TAG, jsonData);
                         if (response.isSuccessful()) {
-
                             currentWeather = getCurrentDetails(jsonData);
+
+                            CurrentWeather displayWeather = new CurrentWeather(
+                                    currentWeather.getLocationLabel(),
+                                    currentWeather.getIcon(),
+                                    currentWeather.getTime(),
+                                    currentWeather.getTemperature(),
+                                    currentWeather.getHumidity(),
+                                    currentWeather.getPrecipChance(),
+                                    currentWeather.getSummary(),
+                                    currentWeather.getGetTimeZone()
+                            );
+
+                            binding.setWeather(displayWeather);
+
                         } else {
                             alertUserAboutError();
                         }
