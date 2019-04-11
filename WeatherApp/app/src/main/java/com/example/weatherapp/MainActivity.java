@@ -2,12 +2,15 @@ package com.example.weatherapp;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,26 +59,27 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeather currentWeather;
 
+    private ImageView iconImageView;
+
+    final double latitude = 29.7604;
+    final double longitude = -95.3698;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
+        getForecast(latitude, longitude);
+    }
+
+    private void getForecast(double latitude, double longitude) {
         final ActivityMainBinding binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
 
         TextView darkSky = findViewById(R.id.darkSkyAttribution);
         darkSky.setMovementMethod(LinkMovementMethod.getInstance());    // Enables clicking on link
 
-        temperature = findViewById(R.id.temperatureValue);
-        time = findViewById(R.id.timeValue);
-        location = findViewById(R.id.locationValue);
-        humidity = findViewById(R.id.humidityValue);
-        precipitation = findViewById(R.id.precipValue);
-        summary = findViewById(R.id.summaryValue);
+        iconImageView = findViewById(R.id.iconImageView);
 
         String apiKey = "73bce4dfddf4d93bf253cdbb61c85400";
-
-        double latitude = 29.7604;
-        double longitude = -95.3698;
 
         String forecastURL = "https://api.darksky.net/forecast/"
                 + apiKey + "/"
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             currentWeather = getCurrentDetails(jsonData);
 
-                            CurrentWeather displayWeather = new CurrentWeather(
+                            final CurrentWeather displayWeather = new CurrentWeather(
                                     currentWeather.getLocationLabel(),
                                     currentWeather.getIcon(),
                                     currentWeather.getTime(),
@@ -118,6 +122,14 @@ public class MainActivity extends AppCompatActivity {
                             );
 
                             binding.setWeather(displayWeather);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Drawable drawable = getResources().getDrawable(displayWeather.getIconId());
+                                    iconImageView.setImageDrawable(drawable);
+                                }
+                            });
 
                         } else {
                             alertUserAboutError();
@@ -176,6 +188,12 @@ public class MainActivity extends AppCompatActivity {
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
+    }
+
+    // This Onclick being called using android:onClick="refreshOnClick" in the xml file
+    public void refreshOnClick(View view) {
+        Toast.makeText(this, "Refreshing data", Toast.LENGTH_LONG).show();
+        getForecast(latitude, longitude);
     }
 
 }
