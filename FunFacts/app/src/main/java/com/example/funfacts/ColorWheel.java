@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class ColorWheel {
     // Fields or Member Variables - Properties about the object
-    private String[] colors = {
+     String[] colors = {
             "#39add1", // light blue
             "#3079ab", // dark blue
             "#c25975", // mauve

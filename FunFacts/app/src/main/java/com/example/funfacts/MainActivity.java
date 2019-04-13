@@ -12,12 +12,36 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
+    private static final String KEY_FACT = "KEY_FACT";
+    private static final String KEY_COLOR = "KEY_COLOR";
     private FactBook factBook = new FactBook();
     private ColorWheel colorWheel = new ColorWheel();
     // Declare our View variables
     private TextView factTextView;
     private Button showFactButton;
     private RelativeLayout relativeLayout;
+    private String mFact = factBook.facts[0];   // initializing with values to prevent null values from shows on screen orientation if user changes orientation before pressing button
+    private int mColor = Color.parseColor(colorWheel.colors[8]);
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Saves instance states for orientation changes
+        outState.putString(KEY_FACT, mFact);
+        outState.putInt(KEY_COLOR, mColor);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // retrieves saved instance fields
+        mFact = savedInstanceState.getString(KEY_FACT);
+        factTextView.setText(mFact);
+        mColor = savedInstanceState.getInt(KEY_COLOR);
+        relativeLayout.setBackgroundColor(mColor);
+        showFactButton.setTextColor(mColor);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
                 // The button was clicked, so update the fact TextView with a new fact
 
                 // Update the screen with our new fact
-                factTextView.setText(factBook.getFact());
+                mFact = factBook.getFact();     // Stores instant state
+                factTextView.setText(mFact);
 
                 // Update background color of screen;
-                int color = colorWheel.getColor();
-                relativeLayout.setBackgroundColor(color);
-                showFactButton.setTextColor(color);
+                mColor = colorWheel.getColor();     // Stores instant state
+                relativeLayout.setBackgroundColor(mColor);
+                showFactButton.setTextColor(mColor);
 
             }
         };
