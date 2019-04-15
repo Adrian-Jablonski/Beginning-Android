@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         List<Hour> hours = Arrays.asList(forecast.getHourlyForecast());
 
         Intent intent = new Intent(this, HourlyForecastActivity.class);
-        intent.putExtra("HourlyList", (Serializable) hours);    // Sends data to HourlyForecastActivity
+        intent.putExtra("HourlyList", (Serializable) hours);    // Sends data to HourlyForecastActivity. Serializable allows for an object to be sent to another activity
         startActivity(intent);
     }
 
